@@ -1,20 +1,12 @@
 @echo off
-title Cleaning TEMP...
-echo ============================
-echo   TEMP CLEANUP STARTED
-echo ============================
+title Safe TEMP Cleaner
+echo Cleaning unused TEMP files...
 
-:: Clean %TEMP%
-echo Cleaning %TEMP% ...
-del /f /s /q "%TEMP%\*" >nul 2>&1
-for /d %%i in ("%TEMP%\*") do rd /s /q "%%i" >nul 2>&1
+:: Clean only files older than 1 day in %TEMP%
+forfiles /p "%TEMP%" /s /m *.* /d -1 /c "cmd /c del /f /q @path" >nul 2>&1
 
-:: Clean Windows Temp
-echo Cleaning C:\Windows\Temp ...
-del /f /s /q "C:\Windows\Temp\*" >nul 2>&1
-for /d %%i in ("C:\Windows\Temp\*") do rd /s /q "%%i" >nul 2>&1
+:: Clean only files older than 1 day in C:\Windows\Temp
+forfiles /p "C:\Windows\Temp" /s /m *.* /d -1 /c "cmd /c del /f /q @path" >nul 2>&1
 
-echo ----------------------------
-echo   TEMP CLEANUP COMPLETE
-echo ----------------------------
+echo Done.
 exit
